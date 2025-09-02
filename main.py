@@ -1,5 +1,81 @@
 import turtle as t
+import time
 
+class Sprite:
+    def __init__(self, screen, image_path, x=0, y=0):
+        """
+        Initialize the sprite.
+
+        :param screen: turtle.Screen() instance
+        :param image_path: Path to the .gif image for the sprite
+        :param x: Initial x position
+        :param y: Initial y position
+        """
+        self.screen = screen
+        self.image_path = image_path
+        
+        # Register the shape if not already registered
+        if image_path not in screen.getshapes():
+            screen.register_shape(image_path)
+        
+        self.turtle = t.Turtle()
+        self.turtle.shape(image_path)
+        self.turtle.penup()
+        self.turtle.speed(0)
+        self.turtle.goto(x, y)
+        self.visible = True
+
+    def change_image(self, new_image_path):
+        """
+        Change the sprite's image to a new .gif.
+
+        :param new_image_path: Path to the new .gif image
+        """
+        if new_image_path not in self.screen.getshapes():
+            self.screen.register_shape(new_image_path)
+        self.turtle.shape(new_image_path)
+        self.image_path = new_image_path
+
+    def show(self):
+        """Make the sprite visible."""
+        if not self.visible:
+            self.turtle.showturtle()
+            self.visible = True
+
+    def hide(self):
+        """Hide the sprite."""
+        if self.visible:
+            self.turtle.hideturtle()
+            self.visible = False
+
+    def move_to(self, x, y):
+        """
+        Instantly move the sprite to a new position.
+
+        :param x: target x-coordinate
+        :param y: target y-coordinate
+        """
+        self.turtle.goto(x, y)
+
+    def move_to_animated(self, x, y, duration=1.0, steps=50):
+        """
+        Move the sprite smoothly from current position to (x, y).
+
+        :param x: target x-coordinate
+        :param y: target y-coordinate
+        :param duration: total animation time in seconds
+        :param steps: number of steps in animation
+        """
+        start_x, start_y = self.turtle.position()
+        delta_x = (x - start_x) / steps
+        delta_y = (y - start_y) / steps
+        delay = duration / steps
+
+        for _ in range(steps):
+            start_x += delta_x
+            start_y += delta_y
+            self.turtle.goto(start_x, start_y)
+            time.sleep(delay)
 
 # Start game
 print("Initializing game")
@@ -13,6 +89,14 @@ move = t.Turtle()
 # Background option
 # wn.bgcolor('lightblue')
 wn.bgpic('./assets/background.gif')
+
+sprite = Sprite(wn, "./assets/plane.gif", x=0, y=0)
+
+# Move instantly
+sprite.move_to(100, 100)
+
+# Move smoothly over 2 seconds
+sprite.move_to_animated(-100, -100, duration=2)
 
 # Mainloop
 wn.mainloop()
