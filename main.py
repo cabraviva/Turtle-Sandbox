@@ -15,7 +15,7 @@ move = t.Turtle()
 wn.bgpic('./assets/background.gif')
 
 sprite = Sprite(wn, "./assets/plane.gif", x=0, y=0)
-
+sprite_bombe = Sprite(wn, "./assets/bomber.gif", x=0, y=0)
 # Move instantly
 sprite.move_to(100, 100)
 
