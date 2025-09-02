@@ -1,5 +1,20 @@
 import turtle as t
 import time
+from PIL import Image
+
+def mirror_gif_in_memory(image_path, axis='horizontal'):
+    img = Image.open(image_path)
+    if axis == 'horizontal':
+        img = img.transpose(Image.FLIP_LEFT_RIGHT)
+    elif axis == 'vertical':
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)
+    else:
+        raise ValueError("Axis must be 'horizontal' or 'vertical'")
+
+    # Create a temporary file
+    tmp_file = tempfile.NamedTemporaryFile(suffix=".gif", delete=False)
+    img.save(tmp_file.name)
+    return tmp_file.name
 
 class Sprite:
     def __init__(self, screen, image_path, x=0, y=0):
@@ -13,6 +28,7 @@ class Sprite:
         """
         self.screen = screen
         self.image_path = image_path
+        self.og_img_path = image_path
         
         # Register the shape if not already registered
         if image_path not in screen.getshapes():
@@ -35,6 +51,22 @@ class Sprite:
             self.screen.register_shape(new_image_path)
         self.turtle.shape(new_image_path)
         self.image_path = new_image_path
+
+    def mirror(self, axis="horizontal"):
+        """
+        Mirror sprite at horizontal or vertical axis
+
+        :param axis: horizontal | vertical
+        """
+        mirrored_path = mirror_gif_in_memory(self.image_path, axis)
+        self.change_image(mirrored_path)
+
+    def original_img(self):
+        """
+        Go back to original img path
+        """
+        self.change_image(self.og_img_path)
+
 
     def show(self):
         """Make the sprite visible."""
