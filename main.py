@@ -11,7 +11,8 @@ move = t.Turtle()
 # t.showturtle()
 
 # Background option
-wn.bgcolor('lightblue')
+# wn.bgcolor('lightblue')
+wn.bgpic('./assets/background.gif')
 
 # Mainloop
 wn.mainloop()
