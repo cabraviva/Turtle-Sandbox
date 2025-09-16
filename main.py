@@ -1,4 +1,5 @@
 import turtle as t
+from objects import PlaneObject
 from sprite import Sprite
 
 # Start game
@@ -14,13 +15,10 @@ move = t.Turtle()
 # wn.bgcolor('lightblue')
 wn.bgpic('./assets/background.gif')
 
-sprite = Sprite(wn, "./assets/plane.gif", x=0, y=0)
-sprite_bombe = Sprite(wn, "./assets/bomber.gif", x=0, y=0)
-# Move instantly
-sprite.move_to(100, 100)
 
-# Move smoothly over 2 seconds
-sprite.move_to_animated(-100, -100, duration=2)
+# NOTE: Test for plane object
+plane_obj = PlaneObject(wn)
+
 
 # Mainloop
 wn.mainloop()
